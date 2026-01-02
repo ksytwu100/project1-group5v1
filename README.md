@@ -1,4 +1,7 @@
 # Recommended Places and Weather Dashboard
+
+> **Note**: This is Karol's updated version as of January 1, 2026.
+
 UCB-VIRT-FSF-PT-07-2024-U-LOLC Poject 1
 
 ## User Story
