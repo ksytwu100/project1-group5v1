@@ -11,7 +11,7 @@ SO THAT I can plan a trip inspired by classmate recommendations or individual in
 
 ```
 
-## Acceptance Criteria 
+## Acceptance Criteria
 
 ```
 GIVEN a travel planner map and weather dashboard landing page with form inputs
@@ -30,4 +30,11 @@ THEN I am presented with a modal prompting me to submit a complete address
 ![Screenshot of rendered weather forecast](./assets/images/rendered-weather-forecast.png)
 
 ## Link to Deployed Application
-This application is deployed to [GitHub Pages](https://dawsofd.github.io/project1-group5)
+
+Link to deployed application: https://ksytwu100.github.io/project1-group5/
+
+Link to github repo: https://github.com/ksytwu100/project1-group5
+
+Link to project presentation:
+
+https://docs.google.com/presentation/d/1iK57jvJxagEz1kN-WoV2y914VwylrTyqR3v11WX1SI4/edit?usp=sharingLinks to an external site.

@@ -91,12 +91,19 @@ function searchAddress () {
     var streetLocal = (JSON.parse(localStorage.getItem("place"))[0].staddress).replace(/ /g,"+");
     var stateLocal = JSON.parse(localStorage.getItem("place"))[0].state;
     var zipLocal = JSON.parse(localStorage.getItem("place"))[0].zipcode;
+    var placeNameLocal = JSON.parse(localStorage.getItem("place"))[0].plname;
 
     var requestGeoURL = "https://nominatim.openstreetmap.org/search.php?q=" + streetLocal + "+" + cityLocal + "%2C" + stateLocal + "+" + zipLocal + "&format=jsonv2";
 
     fetch(requestGeoURL).then(function (response) {
         if (response.ok) {
             response.json().then(function (dataLocal) {
+                // Check if Nominatim returned results
+                if (!dataLocal || dataLocal.length === 0) {
+                    console.error("Nominatim returned no results. Trying city-only search...");
+                    searchAddressFallback();
+                    return;
+                }
 
                 const latLocal = dataLocal[0].lat;
                 const lonLocal = dataLocal[0].lon;
@@ -123,12 +130,50 @@ function searchAddress () {
                     opacity: 0.9
                 });
 
-                tooltip.setContent( "Hello World! This address is a " + typeLocal + ".");
+                tooltip.setContent(placeNameLocal);
                 tooltip.setLatLng([latLocal, lonLocal]);
                 tooltip.addTo(map);
             })
+        } else {
+            console.error("Nominatim API error: " + response.status);
+            searchAddressFallback();
         }
+    }).catch(function(error) {
+        console.error("Fetch error: " + error);
+        searchAddressFallback();
     })
+}
+
+function searchAddressFallback () {
+    // Fallback: use city center from searchCity() results
+    console.log("Using city center coordinates as fallback...");
+    var coordStr = localStorage.getItem("coord");
+    if (coordStr) {
+        var coords = coordStr.split(" ");
+        var latLocal = parseFloat(coords[0]);
+        var lonLocal = parseFloat(coords[1]);
+
+        let mapOptions = {
+            center: [latLocal, lonLocal],
+            zoom: 12
+        }
+        
+        let map = new L.map('map', mapOptions);
+        
+        let layer = new L.TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+        map.addLayer(layer);
+
+        var tooltip = L.tooltip({
+            direction: 'center',
+            permanent: true,
+            noWrap: true,
+            opacity: 0.9
+        });
+
+        tooltip.setContent("City center location");
+        tooltip.setLatLng([latLocal, lonLocal]);
+        tooltip.addTo(map);
+    }
 }
 
 searchCity();
